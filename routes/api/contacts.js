@@ -7,7 +7,7 @@ const {RequestError} = require('../../herpers')
 const router = express.Router()
 
 const contactSchema = Joi.object(
-  {name: Joi.string().required(), phone: Joi.number().required(), email:Joi.string().required()}
+  {name: Joi.string().required(), phone: Joi.number().integer().required(), email:Joi.string().email().required()}
 )
 
 router.get('/', async (req, res, next) => {
