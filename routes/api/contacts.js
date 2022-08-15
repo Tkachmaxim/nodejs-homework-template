@@ -1,25 +1,81 @@
 const express = require('express')
+const contacts = require('../../models/contacts')
+const Joi = require('joi')
+
+const {RequestError} = require('../../herpers')
 
 const router = express.Router()
 
+const contactSchema = Joi.object(
+  {name: Joi.string().required(), phone: Joi.number().required(), email:Joi.string().required()}
+)
+
 router.get('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+  const result = await contacts.listContacts()
+  res.json(result)
+  }
+  catch (err) {
+  next(err)
+  }
 })
 
 router.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params
+  try {
+      const result = await contacts.getContactById(contactId)
+    if (!result) {
+      throw RequestError(404, 'Not found')
+    }
+        res.json(result)
+  } catch (error) {
+    next(error)
+  }
+
 })
 
 router.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const { error } = contactSchema.validate(req.body)
+    if (error) {
+      throw RequestError(400, error.message)
+    }
+   const result = await contacts.addContact(req.body)
+  res.status(201).json(result)
+ } catch (error) {
+  next(error)
+ }
 })
 
 router.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  try {
+    const {contactId} = req.params
+    const result = await contacts.removeContact(contactId)
+    if (!result) {
+      throw RequestError(404, 'Not found')
+    }
+    res.json({message:"Contact deleted"})
+  } catch (error) {
+  next(error)
+  }
 })
 
 router.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
+  const { contactId } = req.params
+  try {
+    const { error } = contactSchema.validate(req.body)
+    if (error) {
+      throw RequestError(400, error.message)
+    }
+    const result = await contacts.updateContact(contactId, req.body)
+    if (!result) {
+      throw RequestError(404, "Not found")
+    }
+    res.json(result)
+
+  } catch (error) {
+    next(error)
+  }
 })
 
 module.exports = router
