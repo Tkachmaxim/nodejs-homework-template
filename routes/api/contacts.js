@@ -1,18 +1,23 @@
 const express = require('express')
 
-const controllers = require('../../controllers/controllers')
-
 const router = express.Router()
 
+const ctrl = require('../../controllers')
 
-router.get('/', controllers.listContact)
+const { ctrlWraper } = require('../../herpers')
+const { validationBody } = require('../../middlewares')
 
-router.get('/:contactId', controllers.getContactById)
+const schemas = require('../../schemas/contactAddSchemas')
 
-router.post('/', controllers.addContact)
 
-router.delete('/:contactId', controllers.removeContact)
+router.get('/', ctrlWraper(ctrl.getAll))
 
-router.put('/:contactId', controllers.updateContact)
+router.get('/:contactId', ctrlWraper(ctrl.getContactById))
+
+router.post('/', validationBody(schemas.add), ctrlWraper(ctrl.addContact))
+
+router.delete('/:contactId', ctrlWraper(ctrl.removeContact))
+
+router.put('/:contactId', validationBody(schemas.add), ctrlWraper(ctrl.updateContact))
 
 module.exports = router
