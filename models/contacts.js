@@ -11,7 +11,7 @@ async function updateFile(file) {
 
 async function listContacts() {
     const allContacts = await fs.readFile(contactsPath)
-    return JSON.parse(allContacts)
+    return JSON.parse(allContacts)||null
 }
 
 async function getContactById(contactId) {
