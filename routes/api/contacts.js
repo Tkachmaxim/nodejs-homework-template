@@ -1,23 +1,26 @@
 const express = require('express')
-
+ 
 const router = express.Router()
 
 const ctrl = require('../../controllers')
 
 const { ctrlWraper } = require('../../herpers')
 const { validationBody } = require('../../middlewares')
+const {isValidId} = require('../../middlewares')
 
-const schemas = require('../../schemas/contactAddSchemas')
+const {schemas} = require('../../models/contact')
 
 
 router.get('/', ctrlWraper(ctrl.getAll))
 
-router.get('/:contactId', ctrlWraper(ctrl.getContactById))
+router.get('/:contactId', isValidId, ctrlWraper(ctrl.getContactById))
 
-router.post('/', validationBody(schemas.add), ctrlWraper(ctrl.addContact))
+router.post('/', validationBody(schemas.addSchema), ctrlWraper(ctrl.addContact))
 
-router.delete('/:contactId', ctrlWraper(ctrl.removeContact))
+router.delete('/:contactId', isValidId, ctrlWraper(ctrl.removeContact))
 
-router.put('/:contactId', validationBody(schemas.add), ctrlWraper(ctrl.updateContact))
+router.put('/:contactId', isValidId, validationBody(schemas.addSchema), ctrlWraper(ctrl.updateContact))
+
+router.patch('/:contactId/favorite', isValidId, validationBody(schemas.updateFavorite), ctrlWraper(ctrl.updateStatusContact))
 
 module.exports = router
