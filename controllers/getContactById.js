@@ -1,9 +1,9 @@
-const services = require('../services')
+const {Contact} = require('../models/contact')
 const RequestError = require('../herpers/RequestError')
 
 const getContactById = async (req, res, next) => {
  const { contactId } = req.params;
-        const contact = await services.getById(contactId)
+        const contact = await Contact.findById(contactId)
         if (!contact) {
             throw RequestError(404, 'Not found')
         }
