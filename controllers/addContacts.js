@@ -3,8 +3,8 @@ const {Contact} = require('../models/contact')
 
 
 const addContact = async (req, res, next) => {
-    const newContact = await Contact.create(req.body)
-    console.log('NewContact', newContact)
+    const {_id : owner} = req.user
+    const newContact = await Contact.create({...req.body, owner})
         if (!newContact) {
             throw RequestError(404, 'Server error')
         }
