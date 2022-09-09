@@ -17,7 +17,12 @@ const contactSchema = new Schema({
     favorite: {
       type: Boolean,
       default: false,
-    },
+  },
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "user",
+    required : true
+    }
 })
 
 contactSchema.post('save', handleSchemaValidatorError)
@@ -26,7 +31,7 @@ const addSchema = Joi.object({
         name: Joi.string().required(),
         phone: Joi.number().integer().required(),
         email: Joi.string().email().required(),
-        favorite: Joi.bool().default(false)
+  favorite: Joi.bool().default(false)
 })
 
 const updateFavorite = Joi.object({
