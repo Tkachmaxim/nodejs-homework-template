@@ -20,6 +20,9 @@ const login = async (req, res) => {
         throw RequestError(401, 'Password wrong')
     }
 
+    
+
+
     const payload = {
         id: user._id
     }
