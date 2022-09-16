@@ -8,7 +8,7 @@ const { ctrlWraper } = require('../../herpers')
 
 const { validationBody } = require('../../middlewares')
 
-const {authenticate}= require('../../middlewares')
+const {authenticate, uploads}= require('../../middlewares')
 
 const {schemas} = require('../../models/user')
 
@@ -17,5 +17,6 @@ router.post('/login', validationBody(schemas.loginSchema), ctrlWraper(ctrl.login
 router.get('/logout', authenticate, ctrlWraper(ctrl.logout))
 router.get('/current', authenticate, ctrlWraper(ctrl.current))
 router.patch('', authenticate, ctrlWraper(ctrl.updateSubscribe))
+router.patch('/avatars', authenticate, uploads.single('avatar'), ctrlWraper(ctrl.updateAvatar))
 
 module.exports = router;

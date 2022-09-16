@@ -1,4 +1,4 @@
-const { Schema, model, version } = require('mongoose');
+const { Schema, model } = require('mongoose');
 const Joi = require('Joi')
 const { handleSchemaValidatorError } = require('../herpers')
 const emailRegexp = /^[\w.]+@[\w.]+.[\w.]+$/
@@ -10,6 +10,11 @@ const userSchema = Schema({
         unique: true,
         match : emailRegexp
     },
+    avatarURL: {
+        type: String,
+        required:true
+    },
+
     password: {
         type: String,
         required: true,
