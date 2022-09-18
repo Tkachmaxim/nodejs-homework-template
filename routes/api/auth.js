@@ -13,6 +13,8 @@ const {authenticate, uploads}= require('../../middlewares')
 const {schemas} = require('../../models/user')
 
 router.post('/signup', validationBody(schemas.registerSchema), ctrlWraper(ctrl.register))
+router.get('/verify/:verificationToken', ctrlWraper(ctrl.verifyEmail))
+router.post('/verify', validationBody(schemas.verifyEmailSchema), ctrl.resenederEmailVerify)
 router.post('/login', validationBody(schemas.loginSchema), ctrlWraper(ctrl.login))
 router.get('/logout', authenticate, ctrlWraper(ctrl.logout))
 router.get('/current', authenticate, ctrlWraper(ctrl.current))
